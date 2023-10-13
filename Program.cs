@@ -9,9 +9,7 @@ namespace diaryjm
         static DateTime dt = DateTime.Now;
 
 
-        private static Note note = new Note("Sperma", "Да я люблю сосать член это пенис и на мне жидкая сперма",
-            DateTime.Now,
-            DateTime.Now.AddDays(1));
+        private static Note note = new Note("Sperma", "Да я люблю сосать член это пенис и на мне жидкая сперма", DateTime.Now, DateTime.Now.AddDays(1));
 
         static void Main(string[] args)
         {
@@ -74,7 +72,7 @@ namespace diaryjm
             Console.WriteLine(note.name + "\n" + note.date + "\n" + note.deadline + "\n" + note.text);
             Console.ReadLine();
             Console.Clear();
-            
+            Menu();
         }
     }
 }
