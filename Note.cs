@@ -13,5 +13,7 @@ public class Note
         this.text = text;
         this.date = date;
         this.deadline = deadline;
+        
+
     }
 }
