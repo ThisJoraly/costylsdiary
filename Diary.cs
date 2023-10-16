@@ -15,20 +15,19 @@ public class Diary
     static DateTime dt = DateTime.Now;
     static int pos = 1;
 
-    static Note note = new Note("Помыть посуду", "Помыть бы сегодня посуду...", new DateTime(2023, 10, 15));
+    static Note note = new Note("Помыть посуду", "Помыть бы сегодня посуду...", DateTime.Today);
 
     static Note note2 = new Note("Сдать практы", "Практические как гидра, отрезаешь одну появляются две другие",
-        new DateTime(2023, 10, 15));
+        DateTime.Today);
 
     static Note note3 = new Note("Забрать посылку", "Посылки???? На почте???? Уже бегу!", new DateTime(2023, 10, 14));
 
     static Note note4 = new Note("Купить подарок", "А кому подарок-то?", new DateTime(2023, 10, 13));
 
     static Note note5 = new Note("Забрать документы", "Наконец-то документы доделали!", new DateTime(2023, 10, 18));
-
-
     public static void init()
     {
+        dailyNotes = new List<Note>();
         notes.Add(note);
         notes.Add(note2);
         notes.Add(note3);
@@ -81,28 +80,14 @@ public class Diary
                     Console.Clear();
                     addNote();
                 }
-                
-                
-
             }
-            
-
             Console.SetCursorPosition(0, pos);
             Console.WriteLine("->");
             key = Console.ReadKey();
-
         } while (key.Key != ConsoleKey.Enter);
-
         Console.SetCursorPosition(0, 8); //TODO - под массив (видимо +4)
         choice();
     }
-
-    
-    
-    
-    
-    
-
 
     public static void launchMenu()
     {
