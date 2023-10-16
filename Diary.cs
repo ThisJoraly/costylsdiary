@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace diaryjm;
@@ -6,33 +7,28 @@ namespace diaryjm;
 public class Diary
 {
     // Чувак, эта вечеринка отстой. Я ненавижу этих людей
-    public static ConsoleKeyInfo key = new ConsoleKeyInfo();
+    public static ConsoleKeyInfo key;
     public static List<Note> notes = new List<Note>();
     public static List<Note> dailyNotes;
+    public static bool notebool = true;
     
     static DateTime dt = DateTime.Now;
     static int pos = 1;
 
-    static Note note = new Note("Помыть посуду", "Помыть бы сегодня посуду...", new DateTime(2023, 10, 15),
-        new DateTime(2023, 10, 15));
+    static Note note = new Note("Помыть посуду", "Помыть бы сегодня посуду...", new DateTime(2023, 10, 15));
 
     static Note note2 = new Note("Сдать практы", "Практические как гидра, отрезаешь одну появляются две другие",
-        new DateTime(2023, 10, 15), new DateTime(2023, 10, 20));
+        new DateTime(2023, 10, 15));
 
-    static Note note3 = new Note("Забрать посылку", "Посылки???? На почте???? Уже бегу!", new DateTime(2023, 10, 14),
-        new DateTime(2023, 10, 23));
+    static Note note3 = new Note("Забрать посылку", "Посылки???? На почте???? Уже бегу!", new DateTime(2023, 10, 14));
 
-    static Note note4 = new Note("Купить подарок", "А кому подарок-то?", new DateTime(2023, 10, 13),
-        new DateTime(2023, 10, 23));
+    static Note note4 = new Note("Купить подарок", "А кому подарок-то?", new DateTime(2023, 10, 13));
 
-    static Note note5 = new Note("Забрать документы", "Наконец-то документы доделали!", new DateTime(2023, 10, 18),
-        new DateTime(2023, 10, 25));
+    static Note note5 = new Note("Забрать документы", "Наконец-то документы доделали!", new DateTime(2023, 10, 18));
 
-    private static bool bl = false;
 
     public static void init()
     {
-
         notes.Add(note);
         notes.Add(note2);
         notes.Add(note3);
@@ -40,7 +36,7 @@ public class Diary
         notes.Add(note5);
     }
 
-    public static void moving(ConsoleKeyInfo cursor)
+    public static void moving()
     {
 
         do
@@ -73,11 +69,23 @@ public class Diary
 
 
             }
-            else if (key.Key == ConsoleKey.Escape)
+            //else if (key.Key == ConsoleKey.Escape)
+            //{
+            //    Console.Clear();
+            //    launchMenu();
+            //}
+            else if (key.Key == ConsoleKey.N)
             {
-                Console.Clear();
-                launchMenu();
+                if (notebool)
+                {
+                    Console.Clear();
+                    addNote();
+                }
+                
+                
+
             }
+            
 
             Console.SetCursorPosition(0, pos);
             Console.WriteLine("->");
@@ -86,7 +94,7 @@ public class Diary
         } while (key.Key != ConsoleKey.Enter);
 
         Console.SetCursorPosition(0, 8); //TODO - под массив (видимо +4)
-        choice(pos);
+        choice();
     }
 
     
@@ -99,14 +107,15 @@ public class Diary
     public static void launchMenu()
     {
         menu();
-        Diary.moving(Diary.key);
+        
+        Diary.moving();
     }
 
     public static void menu()
     {
         Console.Clear();
 
-        Console.WriteLine("Выбрана дата: " + dt.ToString("D"));
+        Console.WriteLine("Выбрана дата: " + dt.ToString("D") + " Для создания заметки нажмите N");
         getAllNotes(notes);
 
 
@@ -130,7 +139,7 @@ public class Diary
     }
 
 
-    public static void choice(int ipos)
+    public static void choice()
     {
         if (notes.Count > 0)
         {
@@ -142,17 +151,39 @@ public class Diary
     public static void infoMenu(Note note)
     {
         Console.Clear();
-        Console.WriteLine(note.name + "\n" + note.text + "\n" + note.date + "\n" + note.deadline);
+        Console.WriteLine("Название: " +note.name + "\n" +"Описание: " +note.text + "\n" + "Дата: " +note.date);
         ConsoleKeyInfo secondkey = Console.ReadKey();
         if (secondkey.Key == ConsoleKey.Escape)
         {
+            
             launchMenu();
+            
         }
+        
 
         Console.ReadLine();
 
 
     }
 
+    public static void addNote()
+    {
+        var info = new CultureInfo("ru-RU");
+        Console.WriteLine("Введите краткое имя заметки");
+        String a = Console.ReadLine();
+        Console.WriteLine("Введите текст в заметке");
+        String b = Console.ReadLine(); 
+        Console.WriteLine("Введите каки макаки в формате [16 октября 2023]");
+        String c = Console.ReadLine();
+        DateTime d = DateTime.Parse(c, info, DateTimeStyles.NoCurrentDateDefault);
+        Note x = new Note(a, b, d);
+        notes.Add(x);
+        Console.WriteLine(x);
+        
+        notebool = false;
+        dailyNotes = new List<Note>();
+        launchMenu();
+    }
+    
     
 }
