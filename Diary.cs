@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace diaryjm;
 
@@ -7,6 +8,8 @@ public class Diary
     // Чувак, эта вечеринка отстой. Я ненавижу этих людей
     public static ConsoleKeyInfo key = new ConsoleKeyInfo();
     public static List<Note> notes = new List<Note>();
+    public static List<Note> dailyNotes;
+    
     static DateTime dt = DateTime.Now;
     static int pos = 1;
 
@@ -55,6 +58,7 @@ public class Diary
             else if (key.Key == ConsoleKey.LeftArrow)
             {
                 Console.Clear();
+                dailyNotes = new List<Note>();
                 dt = dt.AddDays(-1);
                 menu();
 
@@ -63,10 +67,16 @@ public class Diary
             else if (key.Key == ConsoleKey.RightArrow)
             {
                 Console.Clear();
+                dailyNotes = new List<Note>();
                 dt = dt.AddDays(1);
                 menu();
 
 
+            }
+            else if (key.Key == ConsoleKey.Escape)
+            {
+                Console.Clear();
+                launchMenu();
             }
 
             Console.SetCursorPosition(0, pos);
@@ -79,28 +89,8 @@ public class Diary
         choice(pos);
     }
 
-    public static void getAllNotes(List<Note> notes)
-    {
-
-        int i = 1;
-        foreach (Note note in notes)
-        {
-            if (note.date.Date == dt.Date)
-            {
-                Console.Write("  " + i + ". ");
-                Console.WriteLine(note.name);
-                i++;
-            }
-        }
-    }
-
-    public static void choice(int ipos)
-    {
-        if (notes.Count > 0)
-        {
-            infoMenu(notes[ipos].name);
-        }
-    }
+    
+    
     
     
     
@@ -111,6 +101,7 @@ public class Diary
         menu();
         Diary.moving(Diary.key);
     }
+
     public static void menu()
     {
         Console.Clear();
@@ -118,30 +109,47 @@ public class Diary
         Console.WriteLine("Выбрана дата: " + dt.ToString("D"));
         getAllNotes(notes);
 
+
+    }
+    public static void getAllNotes(List<Note> notes)
+    {
+
+        int i = 1;
+        
+        foreach (Note note in notes)
+        {
+            if (note.date.Date == dt.Date)
+            {
+                Console.Write("  " + i + ". ");
+                Console.WriteLine(note.name);
+                
+                dailyNotes.Add(note);
+                i++;
+            }
+        }
     }
 
-    public static void infoMenu(String notename)
+
+    public static void choice(int ipos)
     {
-       
-// Используя метод Find()
-        Note foundNote = notes.Find(note => note.date == dt && note.name == notename);
-        if (foundNote != null)
+        if (notes.Count > 0)
         {
-            Console.WriteLine(note.name + "\n" + note.date + "\n" + note.deadline + "\n" + note.text);
+            infoMenu(dailyNotes[pos-1]);
+        }
+    }
+    
+
+    public static void infoMenu(Note note)
+    {
+        Console.Clear();
+        Console.WriteLine(note.name + "\n" + note.text + "\n" + note.date + "\n" + note.deadline);
+        ConsoleKeyInfo secondkey = Console.ReadKey();
+        if (secondkey.Key == ConsoleKey.Escape)
+        {
+            launchMenu();
         }
 
-        Console.Clear();
-        
-        ConsoleKeyInfo secondkey = Console.ReadKey();
-        switch (secondkey.Key)
-        {
-            case ConsoleKey.Escape:
-                
-                launchMenu();
-                break;
-        }
-        
-            
+        Console.ReadLine();
 
 
     }
